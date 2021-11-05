@@ -1,13 +1,22 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const app = express();
 const date = require(__dirname + "/date.js");
 const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
-const items = []; // Array to store the list of items
-const workItems = []; // Array to store the list of work items
 
+main().catch((err) => console.log(err));
+
+//connecting to mongodb with the url which is hosted locally
+async function main() {
+	// Making a connection to MongoDB with mongooose and creating peopleDB document database in mongodb
+	await mongoose.connect("mongodb://localhost:27017/todolistDB", {
+		useNewUrlParser: true,
+	});
+}
 // GET method root route
 app.get("/", function (req, res) {
 	const day = date.getDate();
