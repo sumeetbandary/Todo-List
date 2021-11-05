@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const app = express();
-const date = require(__dirname + "/date.js");
 const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
@@ -17,10 +16,16 @@ async function main() {
 		useNewUrlParser: true,
 	});
 }
+//Creating the item schema using mongoose
+const itemsSchema = new Schema({
+	name: String,
+});
+const Item = mongoose.model("Item", itemsSchema);
 // GET method root route
 app.get("/", function (req, res) {
-	const day = date.getDate();
-	res.render("list", { listTitle: day, newListItems: items }); // Pass the data to the list.ejs
+	Item.find({}, function (err, foundItems) {
+		res.render("list", { listTitle: "Today", newListItems: foundItems }); // Pass the data to the list.ejs
+	});
 });
 
 // POST method root route
@@ -29,8 +34,13 @@ app.post("/", function (req, res) {
 	if (req.body.list === "Work") {
 		workItems.push(item);
 		res.redirect("/work"); // redirect to work route
-	} else {
-		items.push(item); // Adds the new item into the items array
+	}
+	//Adding the entered item to database
+	else {
+		const newitem = new Item({
+			name: item
+		});
+		newitem.save();
 		res.redirect("/");
 	}
 });
