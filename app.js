@@ -38,11 +38,28 @@ app.post("/", function (req, res) {
 	//Adding the entered item to database
 	else {
 		const newitem = new Item({
-			name: item
+			name: item,
 		});
 		newitem.save();
 		res.redirect("/");
 	}
+});
+// delete route to remve an item from the database using mongoose
+app.post("/delete", function (req, res) {
+	//Stores the id value of the item that has been checked
+	let deleteItem = req.body.checkbox;
+	if (deleteItem) {
+		deleteItem = deleteItem.trim();
+	}
+	//Mongoose function to delete an item using the _id
+	Item.deleteOne({ _id: deleteItem })
+		.then(function () {
+			console.log("Data deleted"); // Success
+		})
+		.catch(function (error) {
+			console.log(error); // Failure
+		});
+	res.redirect("/");
 });
 
 // GET method work route
