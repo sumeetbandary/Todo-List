@@ -12,9 +12,12 @@ main().catch((err) => console.log(err));
 //connecting to mongodb with the url which is hosted locally
 async function main() {
 	// Making a connection to MongoDB with mongooose and creating peopleDB document database in mongodb
-	await mongoose.connect("mongodb://localhost:27017/todolistDB", {
-		useNewUrlParser: true,
-	});
+	await mongoose.connect(
+		"mongodb+srv://sumeet06:Password06$@cluster0.l50je.mongodb.net/todolistDB",
+		{
+			useNewUrlParser: true,
+		}
+	);
 }
 //Creating the item schema using mongoose
 const itemsSchema = new Schema({
