@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const app = express();
-const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -70,6 +69,10 @@ app.get("/work", function (req, res) {
 	res.render("list", { listTitle: "Work List", newListItems: workItems });
 });
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+	port = 3000;
+}
 app.listen(port, function () {
 	console.log("Server started");
 });
